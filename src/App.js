@@ -1,24 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
+import Histogram from 'react-chart-histogram';
+import axios from 'axios';
+import navpng from './navpng.png'
 import './App.css';
 
 function App() {
+  const options = { fillColor: '#FFFFFF', strokeColor: '#4267B2' };
+  const [labels, setLabels] = useState([])
+  const [data, setData] = useState([])
+
+
+  useEffect(async () => {
+    const result = await axios(
+      'https://grow-scale.herokuapp.com/getData',
+    );
+    console.log(result.data.complete_data)
+    const Labels = []
+    const Data = []
+    Object(result.data.complete_data).forEach(function(item) {
+      Labels.push(item.name)
+      Data.push(item.no_users)
+    })
+    setLabels(Labels)
+    setData(Data)
+
+  }, []);
+
+ 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <img src ={navpng} alt="" />
+      <h4>Analytics</h4>
+      <Histogram
+          xLabels={labels}
+          yValues={data}
+          width='700'
+          height='480'
+          options={options}
+      />
+      <p>Context</p>
     </div>
   );
 }
