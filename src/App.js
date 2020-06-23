@@ -34,7 +34,7 @@ function App() {
       <Histogram
           xLabels={labels}
           yValues={data}
-          width='700'
+          width='620'
           height='480'
           options={options}
       />
